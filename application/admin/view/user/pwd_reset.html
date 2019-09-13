@@ -1,0 +1,54 @@
+{include file="common/header"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <form class="layui-form layui-row" action="{:url('pwdReset')}">
+                    <div class="layui-card-body" pad15>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">当前密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="oldPassword"  lay-verify="required"   class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">新密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="pwd" lay-verify="pass"   autocomplete="off" id="pwd" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">确认新密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password"   lay-verify="repass"  autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <a class="layui-btn" lay-submit="" lay-filter="layform">确认修改</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="common/footer"}
+<script>
+    layui.use('form', function () {
+        var form = layui.form, $ = layui.jquery;
+        form.verify({
+            pass: [/(.+){1,12}$/, '密码必须1到12位'],
+            repass: function (value) {
+                var repassvalue = $('#pwd').val();
+                if (value != repassvalue) {
+                    return '两次输入的密码不一致!';
+                }
+            }
+        })
+    });
+</script>

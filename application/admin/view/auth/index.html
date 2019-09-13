@@ -1,0 +1,126 @@
+{include file="common/header"}
+<link rel="stylesheet" href="__CSS__/style.css" type="text/css">
+<div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+
+        <div class="layui-tab-content page-tab-content">
+
+            <div class="layui-tab-item layui-form menu-dl layui-show">
+                <form class="page-list-form">
+                    <dl class="menu-dl1 menu-hd mt10">
+                        <dt>菜单名称</dt>
+                        <dd>
+                            <span class="hd">排序</span>
+                            <span class="hd2">状态</span>
+                            <span class="hd3">操作</span>
+                        </dd>
+                    </dl>
+                    {volist name="menu_list" id="v" key="k"}
+                    <dl class="menu-dl1">
+                        <dt>
+                            <input type="checkbox" lay-skin="primary" title="{$v['title']}">
+                            <input type="text" class="menu-sort j-ajax-input" value="{$v['sort']}">
+                            <input type="checkbox" name="status" value="{$v['id']}" {if condition="$v['status'] eq 1"
+                                   }checked="" {/if} lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" ">
+                            <div class="layui-unselect layui-form-switch layui-form-onswitch" lay-skin="_switch"><em>{if
+                                condition="$v['status'] eq 1"}正常{else /}关闭{/if}</em><i></i></div>
+                            <div class="menu-btns">
+                                <a href="{:url('edit?id='.$v['id'])}" title="编辑"><i
+                                        class="layui-icon layui-icon-edit"></i></a>
+                                <a href="{:url('edit?pid='.$v['id'])}" title="添加子菜单"><i
+                                        class="layui-icon layui-icon-add-1"></i></a>
+                                <a id="{$v['id']}" class="delete" title="删除"><i
+                                        class="layui-icon layui-icon-delete"></i></a>
+                            </div>
+                        </dt>
+                        <dd>
+                            {volist name="v['childs']" id="vv" key="kk"}
+                            <dl class="menu-dl2">
+                                <dt>
+                                    <input type="checkbox" lay-skin="primary" title="{$vv['title']}">
+                                    <input type="text" class="menu-sort j-ajax-input" value="{$vv['sort']}">
+                                    <input type="checkbox" name="status" value="{$vv['id']}" {if
+                                           condition="$vv['status'] eq 1" }checked="" {/if} lay-skin="switch"
+                                    lay-filter="switchStatus" lay-text="正常|关闭" >
+                                    <div class="layui-unselect layui-form-switch layui-form-onswitch"
+                                         lay-skin="_switch"><em>{if condition="$vv['status'] eq 1"}正常{else
+                                        /}关闭{/if}</em><i></i></div>
+                                    <div class="menu-btns">
+                                        <a href="{:url('edit?id='.$vv['id'])}" title="编辑"><i
+                                                class="layui-icon layui-icon-edit"></i></a>
+                                        <a href="{:url('edit?pid='.$vv['id'])}" title="添加子菜单"><i
+                                                class="layui-icon layui-icon-add-1"></i></a>
+                                        <a id="{$vv['id']}" class="delete" title="删除"><i
+                                                class="layui-icon layui-icon-delete"></i></a>
+                                    </div>
+                                </dt>
+
+                                {volist name="vv['childs']" id="vvv" key="kkkk"}
+
+                                <dd>
+                                    <input type="checkbox" lay-skin="primary" title="{$vvv['title']}">
+                                    <input type="text" class="menu-sort j-ajax-input" value="{$vvv['sort']}">
+                                    <input type="checkbox" name="status" value="{$vvv['id']}" {if
+                                           condition="$vvv['status'] eq 1" }checked="" {/if} lay-skin="switch"
+                                    lay-filter="switchStatus" lay-text="正常|关闭" >
+                                    <div class="layui-unselect layui-form-switch layui-form-onswitch"
+                                         lay-skin="_switch"><em>{if condition="$vvv['status'] eq 1"}正常{else
+                                        /}关闭{/if}</em><i></i></div>
+                                    <div class="menu-btns">
+                                        <a href="{:url('edit?id='.$vvv['id'])}" title="编辑"><i
+                                                class="layui-icon layui-icon-edit"></i></a>
+                                        <a href="{:url('edit?pid='.$vvv['id'])}" title="添加子菜单"><i
+                                                class="layui-icon layui-icon-add-1"></i></a>
+                                        <a id="{$vvv['id']}" class="delete" title="删除"><i
+                                                class="layui-icon layui-icon-delete"></i></a>
+                                    </div>
+                                </dd>
+                                {/volist}
+                            </dl>
+                            {/volist}
+                        </dd>
+                    </dl>
+                    {/volist}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="common/footer"}
+<script>
+    layui.use(['layer', 'form'], function () {
+        var form = layui.form, layer = layui.layer;
+        form.on('switch(switchStatus)', function (obj) {
+            loading = layer.load(1, {shade: [0.1, '#fff']});
+            var id = obj.elem.value;
+            var status = obj.elem.checked === true ? 1 : 0;
+            $.post('{:url("menuStatus")}', {'id': id, 'status': status}, function (res) {
+                layer.close(loading);
+                if (res.code == 1) {
+                    layer.msg(res.msg, {time: 1000, icon: 1});
+                } else {
+                    layer.msg(res.msg, {time: 1000, icon: 2});
+                }
+            })
+        });
+
+        $('.delete').click(function () {
+            var id = $(this).attr('id');
+            layer.confirm('确定要删除?', function (index) {
+                $.ajax({
+                    url: "{:url('menuDel')}",
+                    data: {id: id},
+                    type: "post",
+                    success: function (res) {
+                        layer.msg(res.msg);
+                        if (res.code == 1) {
+                            setTimeout(function () {
+                                location.href = res.url;
+                            }, 1500)
+                        }
+                    }
+                })
+            })
+        })
+    });
+</script>

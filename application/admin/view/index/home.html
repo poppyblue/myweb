@@ -1,0 +1,138 @@
+{include file="common/header"}
+<script src="__JS__/echarts.min.js"></script>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space10">
+
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    当日注册用户数
+                    <span class="layui-badge layui-bg-blue layuiadmin-badge">人</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">{$reg_num}</p>
+                    <!--<p>
+                        总计访问量
+                        <span class="layuiadmin-span-color">88万 <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+                    </p>-->
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    当日活跃用户数
+                    <span class="layui-badge layui-bg-cyan layuiadmin-badge">人</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">{$login_num}</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    总用户数
+                    <span class="layui-badge layui-bg-green layuiadmin-badge">人</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+
+                    <p class="layuiadmin-big-font">{$num}</p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-sm6 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    留言数
+                    <span class="layui-badge layui-bg-orange layuiadmin-badge">月</span>
+                </div>
+                <div class="layui-card-body layuiadmin-card-list">
+                    <p class="layuiadmin-big-font">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <i class="iconfont icon-dingdan1"></i>用户统计
+                </div>
+                <div class="layui-card-body">
+                    <div id="graphic" class="">
+                        <div id="main" class="main" style="height: 300px;"></div>
+
+                        <a href="javascript:;" data-url="page/systemSetting/icons.html">
+11
+
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">最新新闻</div>
+                <div class="layui-card-body">
+                    <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>标题</th>
+                            <th>发布时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="data" id="vo"}
+                        <tr>
+                            <td>{$_GET['page']?($_GET['page']-1)*5+1+$key:$key+1}</td>
+                            <td><a href="javascript:;" data-url="{:url('news/view',['id'=>$vo.id])}">{$vo.title}</a></td>
+                            <td>{notempty name="$vo.create_time"}{$vo.create_time|date="Y-m-d H:i:s",###}{/notempty}</td>
+                        </tr>
+                        {/volist}
+
+                        </tbody>
+                    </table>
+                    {$data->render()}
+                </div>
+            </div>
+        </div>-->
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '最近7天用户数'
+        },
+        tooltip: {
+            show: true
+        },
+        legend: {},
+        yAxis: [{
+            type: 'value'
+        }],
+        xAxis: [],
+        series: []
+    };
+    $.get('{:url("user/statistics")}').done(function(data) {
+        myChart.setOption({
+            legend: data.legend,
+            xAxis: data.xAxis,
+            series: data.series
+        });
+    });
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+</script>
+{include file="common/footer"}

@@ -1,0 +1,64 @@
+{include file="common/header"}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="table-head-btn">
+                <form class="layui-form seller-form">
+                    <a href="{:url('courseEdit')}" class="layui-btn layui-btn-sm" style="float:right;">添加课程</a>
+                </form>
+            </div>
+            <table class="layui-table" id="list" lay-filter="list"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="action">
+    <a href="{:url('courseEdit')}?id={{d.id}}" class="layui-btn layui-btn-xs">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+{include file="common/footer"}
+
+<script>
+    layui.use(['layer', 'table', 'form'], function () {
+        var form = layui.form, table = layui.table, layer = layui.layer;
+        var tableIn = table.render({
+            id: 'data',
+            elem: '#list',
+            url: '{:url("course")}',
+            method: 'post',
+            page: true,
+            cols: [[
+                {checkbox: true, align: 'center'}
+                , {type: 'numbers', align: 'center', title: '序号', width: 80}
+                , {field: 'course', align: 'center', title: '课程类别'}
+                , {width: 160, align: 'center', title: '操作', toolbar: '#action'}
+            ]],
+            limits: [10, 20, 50, 100],
+            limit: 10 //每页默认显示的数量
+        });
+        $('#search').on('click', function () {
+            var key = $('#key').val();
+            var type = $('#type').val();
+            tableIn.reload({page: {page: 1}, where: {key: key, type: type}});
+        });
+        table.on('tool(list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('您确定要删除吗？', function (index) {
+                    var loading = layer.load(1, {shade: [0.1, '#fff']});
+                    $.post("{:url('courseDel')}", {id: data.id}, function (res) {
+                        layer.close(loading);
+                        if (res.code === 1) {
+                            layer.msg(res.msg, {time: 1000, icon: 1});
+                            tableIn.reload();
+                        } else {
+                            layer.msg('操作失败！', {time: 1000, icon: 2});
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,54 @@
+{include file="common/header"}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form layui-row" lay-filter="form-lost" action="{:url('claimform')}">
+                        <input type="hidden" name="id"/>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">你的姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="c_name" class="layui-input" lay-verify="required">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">对物品描述</label>
+                                <div class="layui-input-block">
+                                    <textarea placeholder="请输入内容" name="c_content" class="layui-textarea" lay-verify="required"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <a class="layui-btn" lay-submit="" lay-filter="layform">保存</a>
+                                    <a href="{:url('index')}" class="layui-btn layui-btn-primary">返回</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="common/footer"}
+<script type="text/javascript" charset="utf-8" src="__JS__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__JS__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="__JS__/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+    // var url = "{:url('Ueditor/index')}";
+    // var ue = UE.getEditor('content', {
+    //     initialFrameHeight: 250,
+    //     zIndex: 100
+    // });
+</script>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form, $ = layui.jquery, laydate = layui.laydate;
+        laydate.render({elem: '#create_time', type: 'datetime', value: new Date()});
+        form.val("form-lost", {$info});
+    });
+</script>

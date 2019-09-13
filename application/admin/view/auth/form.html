@@ -1,0 +1,80 @@
+{include file="common/header"}
+<div class="layui-fluid">
+    <div class="layui-row ">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form layui-row" method="post" lay-filter="form-rule" action="{:url('edit')}" id="form-rule">
+                        <input type="hidden" class="field-id" name="id" />
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属菜单</label>
+                            <div class="layui-input-2">
+                                <select name="pid" class="field-pid" type="select" lay-filter="pid">
+                                    <option value="0" level="0">顶级菜单</option>
+                                    {$menuOptions}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">菜单名称</label>
+                            <div class="layui-input-2">
+                                <input type="text" class="layui-input field-title" name="title" lay-verify="required"
+                                       autocomplete="off" placeholder="请输入菜单名称">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图标设置</label>
+                            <div class="layui-input-2">
+                                <input type="text" class="layui-input field-icon" name="icon" lay-verify="required"
+                                       autocomplete="off" placeholder="可自定义或使用系统图标">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">排序</label>
+                            <div class="layui-input-2">
+                                <input type="text" class="layui-input field-sort" name="sort" lay-verify="required"
+                                       autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">菜单链接</label>
+                            <div class="layui-input-2">
+                                <input type="text" class="layui-input field-href" name="href" lay-verify="required"
+                                       autocomplete="off" placeholder="请严格按照参考格式填写">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                必填，模块格式：控制器名/方法名，插件直接设置：plugins/run，<span class="red">请留意大小写</span>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态设置</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" class="field-status" name="status" value="1" title="启用" checked>
+                                <input type="radio" class="field-status" name="status" value="0" title="禁用">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">菜单/操作</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" class="field-menu" name="menu" value="1" title="菜单" checked>
+                                <input type="radio" class="field-menu" name="menu" value="0" title="操作">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <a class="layui-btn" lay-submit="" lay-filter="layform">保存</a>
+                                <a class="layui-btn layui-btn-primary" href="{:url('index')}">返回</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="common/footer"}
+<script>
+    layui.use(['func'], function () {
+        layui.func.assign({$info});
+    });
+</script>
